@@ -1,3 +1,7 @@
+# Robyn 3.12.5
+
+* Replaced deprecated ggplot2 line `size` settings with `linewidth` in plot exports, removing the warning introduced in ggplot2 3.4.0.
+
 # Robyn 3.12.4
 
 * Restored the bundled `dt_prophet_holidays` dataset, which was removed when the R package was moved to the repository root.

@@ -119,7 +119,7 @@ robyn_plots <- function(
             fill = .data$channel
           ),
           alpha = .8,
-          size = 0
+          linewidth = 0
         ) +
         theme_lares(background = "white", legend = "none", pal = 1) +
         labs(
@@ -797,7 +797,7 @@ robyn_onepagers <- function(
             aes(x = .data$spend, y = .data$response, color = .data$channel),
             stat = "identity",
             position = "stack",
-            size = 0.1,
+            linewidth = 0.1,
             fill = "grey50",
             alpha = 0.4,
             show.legend = FALSE
@@ -1663,7 +1663,7 @@ allocation_plots <- function(
       ),
       stat = "align",
       position = "stack",
-      size = 0.1,
+      linewidth = 0.1,
       fill = "grey50",
       alpha = 0.4,
       show.legend = FALSE
@@ -2239,7 +2239,7 @@ refresh_plots_json <- function(
       xintercept = 1,
       alpha = 0.8,
       linetype = "dashed",
-      size = 0.5,
+      linewidth = 0.5,
       colour = "#39638b"
     ) +
     geom_col(aes(x = .data$colsize), na.rm = TRUE) +
