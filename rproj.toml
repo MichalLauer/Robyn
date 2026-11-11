@@ -1,0 +1,25 @@
+[project]
+name = "Robyn"
+version = "0.1.0"
+type = "project"
+
+[dependencies]
+R = ">= 4.6"
+doParallel = "*"
+doRNG = "*"
+dplyr = "*"
+foreach = "*"
+ggplot2 = "*"
+ggridges = "*"
+glmnet = "*"
+lares = "*"
+lubridate = "*"
+nloptr = "*"
+patchwork = "*"
+prophet = "*"
+reticulate = "*"
+stringr = "*"
+tidyr = "*"
+
+[dependency-groups.dev]
+devtools = "*"
