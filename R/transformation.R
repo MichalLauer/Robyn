@@ -158,18 +158,19 @@ adstock_weibull <- function(
         ) # plot(thetaVec)
         thetaVecCum <- cumprod(thetaVec) # plot(thetaVecCum)
       }
-      x_decayed <- mapply(
-        function(x_val, x_pos) {
-          x.vec <- c(rep(0, x_pos - 1), rep(x_val, windlen - x_pos + 1))
-          thetaVecCumLag <- lag(thetaVecCum, x_pos - 1, default = 0)
-          x.prod <- x.vec * thetaVecCumLag
-          return(x.prod)
-        },
-        x_val = x,
-        x_pos = seq_along(x)
+      # Apply the same lag weights without building a windlen-by-length(x) matrix.
+      x_decayed <- tail(
+        as.numeric(
+          stats::filter(
+            c(rep(0, windlen - 1), x),
+            thetaVecCum,
+            method = "convolution",
+            sides = 1
+          )
+        ),
+        length(x)
       )
-      x_imme <- diag(x_decayed)
-      x_decayed <- rowSums(x_decayed)[seq_along(x)]
+      x_imme <- x * thetaVecCum[1]
     }
   } else {
     x_decayed <- x_imme <- x

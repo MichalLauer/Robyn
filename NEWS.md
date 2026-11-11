@@ -1,3 +1,7 @@
+# Robyn 3.12.6
+
+* Sped up Weibull adstock transformations by calculating the weighted history directly instead of building a time-by-time matrix. Transformation results remain equivalent within floating-point precision.
+
 # Robyn 3.12.5
 
 * Replaced deprecated ggplot2 line `size` settings with `linewidth` in plot exports, removing the warning introduced in ggplot2 3.4.0.
