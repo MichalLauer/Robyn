@@ -1,3 +1,7 @@
+# Robyn 3.12.4
+
+* Restored the bundled `dt_prophet_holidays` dataset, which was removed when the R package was moved to the repository root.
+
 # Robyn 3.12.3
 
 * Made `train_size` optional in input hyperparameters. `robyn_run()` now applies its existing default based on `ts_validation` without warning that `train_size` is missing when validation is disabled.
