@@ -97,8 +97,9 @@
 #' iterations * 5 trials on 8 cores, it takes less than 30 minutes. Both Weibull
 #' options take up to twice as much time.
 #' @param hyperparameters List. Contains hyperparameter lower and upper bounds.
-#' Names of elements in list must be identical to output of \code{hyper_names()}.
-#' To fix hyperparameter values, provide only one value.
+#' Names of media hyperparameters must match \code{hyper_names()}.
+#' To fix hyperparameter values, provide only one value. \code{train_size} is
+#' optional; \code{robyn_run()} sets its default according to \code{ts_validation}.
 #' @param window_start,window_end Character. Set start and end dates of modelling
 #' period. Recommended to not start in the first date in dataset to gain adstock
 #' effect from previous periods. Also, columns to rows ratio in the input data
