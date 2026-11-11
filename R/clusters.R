@@ -235,16 +235,18 @@ robyn_clusters <- function(
     db <- (output$plot_clusters_ci /
       (output$plot_models_rois + output$plot_models_errors)) +
       patchwork::plot_layout(heights = c(get_height, 1), guides = "collect")
-    # Suppressing "Picking joint bandwidth of x" messages +
-    # In min(data$x, na.rm = TRUE) : no non-missing arguments to min; returning Inf warnings
-    # Setting try() to avoid error: One or both dimensions exceed the maximum (50000px).
-    #   Use `options(ragg.max_dim = ...)` to change the max
+    # Size the plot by media rows rather than hyperparameter columns, and keep
+    # the rendered image below the graphics device's dimension limit.
+    plot_height <- 4 + length(unique(ci_list$df_ci$rn)) * 2
+    plot_dpi <- min(500, floor(12000 / plot_height))
+    # Suppress density bandwidth and empty-range warnings while preserving
+    # the cluster results if the detail image cannot be rendered.
     try(suppressMessages(suppressWarnings(ggsave(
       paste0(path, "pareto_clusters_detail.png"),
       plot = db,
-      dpi = 500,
+      dpi = plot_dpi,
       width = 12,
-      height = 4 + length(all_paid) * 2,
+      height = plot_height,
       limitsize = FALSE
     ))))
   }

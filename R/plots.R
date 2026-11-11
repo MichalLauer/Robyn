@@ -243,8 +243,7 @@ robyn_plots <- function(
         select(
           variables = .data$rn,
           .data$roi_total,
-          .data$iteration,
-          .data$trial
+          .data$iteration
         ) %>%
         arrange(.data$iteration, .data$variables)
       bin_limits <- c(1, 20)
@@ -271,8 +270,7 @@ robyn_plots <- function(
           iter_bin = factor(
             .data$iter_bin,
             levels = sort(set_bin, decreasing = TRUE)
-          ),
-          trial = as.factor(.data$trial)
+          )
         )
       plot_vars <- unique(dt_ridges$variables)
       plot_n <- ceiling(length(plot_vars) / 6)
@@ -285,8 +283,7 @@ robyn_plots <- function(
           aes(
             x = .data$roi_total,
             y = .data$iter_bin,
-            fill = as.integer(.data$iter_bin),
-            linetype = .data$trial
+            fill = as.integer(.data$iter_bin)
           )
         ) +
           scale_fill_distiller(palette = "GnBu") +
@@ -298,7 +295,7 @@ robyn_plots <- function(
             alpha = 0.7
           ) +
           facet_wrap(~ .data$variables, scales = "free") +
-          guides(fill = "none", linetype = "none") +
+          guides(fill = "none") +
           theme_lares(background = "white", ) +
           labs(
             x = paste(metric, "by Channel"),
