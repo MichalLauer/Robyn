@@ -317,21 +317,44 @@ robyn_plots <- function(
   } # End of !hyper_fixed
 
   # Time series and errors convergence validation
-  get_height <- ceiling(12 * OutputCollect$OutputModels$trials / 3)
   all_plots[["ts_validation"]] <- ts_validation(
     OutputCollect$OutputModels,
     quiet = TRUE,
     ...
   )
   if (export) {
-    ggsave(
-      paste0(plot_folder, "ts_validation", ".png"),
-      plot = all_plots[["ts_validation"]],
-      dpi = 300,
-      width = 10,
-      height = get_height,
-      limitsize = FALSE
+    # Keep each faceted image readable and below ragg's 50,000 px limit.
+    trial_groups <- split(
+      seq_len(OutputCollect$OutputModels$trials),
+      ceiling(seq_len(OutputCollect$OutputModels$trials) / 10)
     )
+    for (trial_ids in trial_groups) {
+      filename <- if (identical(trial_ids, trial_groups[[1]])) {
+        "ts_validation.png"
+      } else {
+        sprintf(
+          "ts_validation_trials_%s-%s.png",
+          min(trial_ids), max(trial_ids)
+        )
+      }
+      plot <- if (length(trial_groups) == 1) {
+        all_plots[["ts_validation"]]
+      } else {
+        ts_validation(
+          OutputCollect$OutputModels,
+          quiet = TRUE,
+          trial_ids = trial_ids
+        )
+      }
+      ggsave(
+        paste0(plot_folder, filename),
+        plot = plot,
+        dpi = 300,
+        width = 10,
+        height = 4 * length(trial_ids),
+        limitsize = FALSE
+      )
+    }
   }
 
   return(invisible(all_plots))
@@ -2314,9 +2337,10 @@ refresh_plots_json <- function(
 #' the better, given the time-series wasn't overfitted.
 #'
 #' @rdname robyn_outputs
+#' @param trial_ids Integer vector. Trials to include in the validation plot.
 #' @return Invisible list with \code{ggplot} plots.
 #' @export
-ts_validation <- function(OutputModels, quiet = FALSE, ...) {
+ts_validation <- function(OutputModels, quiet = FALSE, trial_ids = NULL, ...) {
   resultHypParam <- bind_rows(
     lapply(
       OutputModels[
@@ -2327,6 +2351,7 @@ ts_validation <- function(OutputModels, quiet = FALSE, ...) {
       function(x) x$resultCollect$resultHypParam
     )
   ) %>%
+    filter(is.null(trial_ids) | .data$trial %in% trial_ids) %>%
     group_by(.data$trial) %>%
     mutate(i = row_number()) %>%
     ungroup()
@@ -2402,7 +2427,7 @@ ts_validation <- function(OutputModels, quiet = FALSE, ...) {
     theme_lares(background = "white", legend = "top", pal = 2) +
     scale_x_abbr()
 
-  get_height <- max(resultHypParam$trial)
+  get_height <- length(unique(resultHypParam$trial))
   pw <- (pNRMSE / pIters) +
     patchwork::plot_annotation(
       title = "Time-series validation & Convergence",

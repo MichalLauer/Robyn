@@ -1,3 +1,7 @@
+# Robyn 3.12.7
+
+* Split time-series validation exports into readable groups of up to 10 trials, keeping image dimensions below the graphics device limit so model one-pagers are exported as well.
+
 # Robyn 3.12.6
 
 * Sped up Weibull adstock transformations by calculating the weighted history directly instead of building a time-by-time matrix. Transformation results remain equivalent within floating-point precision.
